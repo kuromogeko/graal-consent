@@ -8,8 +8,11 @@ import reactor.core.publisher.Mono;
 @RestController
 public class ConsentController {
 
-    @GetMapping("/api/v1/hello")
+    @GetMapping("/api/v1/purposes")
     public Mono<Hello> sayHi(){
         return Mono.just(new Hello("Hello World"));
     }
+
+    
+
 }
