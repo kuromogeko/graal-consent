@@ -7,11 +7,12 @@ import de.datev.wjax.hello.consent.domain.ErrorType;
 import java.util.UUID;
 
 //Aggregate
+//Write Model
 public class ConsentAggregate {
     private ReferencedPurpose purpose;
     private Status status;
-    private SubjectReference subjectReference;
-    private UUID consentId;
+    private final SubjectReference subjectReference;
+    private final UUID consentId;
 
     private transient final DomainEventPublisher domainEventPublisher;
 
@@ -43,5 +44,14 @@ public class ConsentAggregate {
 
     public SubjectReference getSubjectReference() {
         return subjectReference;
+    }
+
+    protected ConsentAggregate applyGivenConsent(ConsentGivenEvent consentGivenEvent) {
+        this.status = Status.GIVEN;
+        return this;
+    }
+
+    public Status getStatus() {
+        return this.status;
     }
 }

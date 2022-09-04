@@ -17,6 +17,10 @@ public class ReferencedPurpose {
         return agreedVersion;
     }
 
+    public boolean equals(ReferencedPurpose obj) {
+        return this.purposeId == obj.getPurposeId() && this.agreedVersion == obj.getAgreedVersion();
+    }
+
     public UUID getPurposeId() {
         return purposeId;
     }
