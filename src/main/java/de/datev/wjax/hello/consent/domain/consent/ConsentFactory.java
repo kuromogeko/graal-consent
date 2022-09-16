@@ -11,17 +11,14 @@ import java.util.UUID;
 public class ConsentFactory {
 
     private final DomainEventPublisher domainEventPublisher;
-    private final ConsentRepository repository;
 
-    public ConsentFactory(DomainEventPublisher domainEventPublisher, ConsentRepository repository) {
+    public ConsentFactory(DomainEventPublisher domainEventPublisher) {
         this.domainEventPublisher = domainEventPublisher;
-        this.repository = repository;
     }
 
     public Mono<ConsentAggregate> createConsent(GiveConsentCommand command, Subject subject) {
         //TODO Switch to creation event style repo?
-                return Mono.just(new ConsentAggregate(command.getReferencedPurpose(), Status.NONE, subject.getReference(), UUID.randomUUID(), domainEventPublisher))
-                        .flatMap(consentAggregate -> this.repository.save(consentAggregate).thenReturn(consentAggregate));
+                return Mono.just(new ConsentAggregate(command.getReferencedPurpose(), Status.NONE, subject.getReference(), UUID.randomUUID(), domainEventPublisher));
     }
 
 

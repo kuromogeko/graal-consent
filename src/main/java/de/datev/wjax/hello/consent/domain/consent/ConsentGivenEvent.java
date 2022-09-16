@@ -9,12 +9,12 @@ public class ConsentGivenEvent implements DomainEvent {
     private final ReferencedPurpose purpose;
 
 
-    private final SubjectReference reference;
+    private final SubjectReference subjectReference;
 
-    public ConsentGivenEvent(UUID consentId, ReferencedPurpose purpose, SubjectReference reference) {
+    public ConsentGivenEvent(UUID consentId, ReferencedPurpose purpose, SubjectReference subjectReference) {
         this.consentId = consentId;
         this.purpose = purpose;
-        this.reference = reference;
+        this.subjectReference = subjectReference;
     }
 
     public UUID getConsentId() {
@@ -25,8 +25,8 @@ public class ConsentGivenEvent implements DomainEvent {
         return purpose;
     }
 
-    public SubjectReference getReference() {
-        return reference;
+    public SubjectReference getSubjectReference() {
+        return subjectReference;
     }
 
 }
