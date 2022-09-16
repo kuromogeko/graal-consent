@@ -4,17 +4,21 @@ import de.datev.wjax.hello.consent.domain.DomainEvent;
 
 import java.util.UUID;
 
-public class ConsentGivenEvent implements DomainEvent {
+public class ConsentWithdrawnEvent implements DomainEvent {
     private final UUID consentId;
     private final ReferencedPurpose purpose;
 
 
     private final SubjectReference reference;
 
-    public ConsentGivenEvent(UUID consentId, ReferencedPurpose purpose, SubjectReference reference) {
+    public ConsentWithdrawnEvent(UUID consentId, ReferencedPurpose purpose, SubjectReference reference) {
         this.consentId = consentId;
         this.purpose = purpose;
         this.reference = reference;
+    }
+
+    public SubjectReference getReference() {
+        return reference;
     }
 
     public UUID getConsentId() {
@@ -24,9 +28,4 @@ public class ConsentGivenEvent implements DomainEvent {
     public ReferencedPurpose getPurpose() {
         return purpose;
     }
-
-    public SubjectReference getReference() {
-        return reference;
-    }
-
 }

@@ -9,7 +9,7 @@ import java.util.UUID;
 //Aggregate
 //Write Model
 public class ConsentAggregate {
-    private ReferencedPurpose purpose;
+    private final ReferencedPurpose purpose;
     private Status status;
     private final SubjectReference subjectReference;
     private final UUID consentId;
@@ -25,8 +25,8 @@ public class ConsentAggregate {
     }
 
     public ConsentGivenEvent giveConsent(){
-        if(this.status == Status.GIVEN){
-            throw new DomainException("Consent is already given", ErrorType.USER_ERROR);
+        if(this.status == Status.GIVEN || this.status == Status.INVALID){
+            throw new DomainException("Consent is either already given or no longer valid", ErrorType.USER_ERROR);
         }
         this.status = Status.GIVEN;
         ConsentGivenEvent event = new ConsentGivenEvent(this.getConsentId(), this.getPurpose(), this.getSubjectReference());
@@ -46,12 +46,20 @@ public class ConsentAggregate {
         return subjectReference;
     }
 
-    protected ConsentAggregate applyGivenConsent(ConsentGivenEvent consentGivenEvent) {
-        this.status = Status.GIVEN;
-        return this;
-    }
+
 
     public Status getStatus() {
         return this.status;
     }
+
+    public ConsentWithdrawnEvent withdrawConsent() {
+        if(this.status != Status.GIVEN){
+            throw new DomainException("Consent is not given, so cannot be withdrawn", ErrorType.USER_ERROR);
+        }
+        this.status = Status.WITHDRAWN;
+        ConsentWithdrawnEvent event = new ConsentWithdrawnEvent(this.getConsentId(), this.getPurpose(), this.getSubjectReference());
+        this.domainEventPublisher.publish(event);
+        return event;
+    }
+
 }

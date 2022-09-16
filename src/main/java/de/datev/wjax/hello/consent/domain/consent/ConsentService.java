@@ -43,6 +43,24 @@ public class ConsentService {
                 })
                 .flatMap(subject -> this.repository.getBySubjectAndPurposeRef(subject.getId(),command.getReferencedPurpose())
                         .switchIfEmpty(this.consentFactory.createConsent(command,subject)))
-                .map(ConsentAggregate::giveConsent);
+                .flatMap(consentAggregate -> {
+                    var event = consentAggregate.giveConsent();
+                    return repository.save(consentAggregate).thenReturn(event);
+                });
     }
+
+    public Mono<ConsentWithdrawnEvent> withdrawConsent(Actor actor, WithdrawConsentCommand command){
+        return this.repository.getById(command.getConsentId())
+                .switchIfEmpty(Mono.error(new DomainException("Actor may not access referenced consent or it does not exist", ErrorType.USER_ERROR)))
+                .flatMap(consentAggregate -> {
+                    if(actor.getSubjectByReference(consentAggregate.getSubjectReference()).isEmpty()){
+                        return Mono.error(new DomainException("Actor may not access referenced consent or it does not exist", ErrorType.USER_ERROR));
+                    }
+                    var event = consentAggregate.withdrawConsent();
+                    return repository.save(consentAggregate).thenReturn(event);
+                });
+    }
+
+    //Purpose updated/deleted
+
 }
