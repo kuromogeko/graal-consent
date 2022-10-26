@@ -4,7 +4,7 @@ import de.datev.wjax.hello.consent.domain.actors.Actor;
 import de.datev.wjax.hello.consent.domain.DomainException;
 import de.datev.wjax.hello.consent.domain.ErrorType;
 import de.datev.wjax.hello.consent.domain.actors.Subject;
-import de.datev.wjax.hello.consent.domain.purpose.PurposeRepository;
+import de.datev.wjax.hello.consent.domain.purpose.ConsentPurposeRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,19 +13,19 @@ import static de.datev.wjax.hello.consent.domain.ErrorType.USER_ERROR;
 @Service
 public class ConsentService {
     private final ConsentFactory consentFactory;
-    private final PurposeRepository purposeRepository;
+    private final ConsentPurposeRepository consentPurposeRepository;
     private final ConsentRepository repository;
 
 
-    public ConsentService(ConsentFactory consentFactory, PurposeRepository purposeRepository, ConsentRepository repository) {
+    public ConsentService(ConsentFactory consentFactory, ConsentPurposeRepository consentPurposeRepository, ConsentRepository repository) {
         this.consentFactory = consentFactory;
-        this.purposeRepository = purposeRepository;
+        this.consentPurposeRepository = consentPurposeRepository;
         this.repository = repository;
     }
 
     //Side effect, purpose repository, consent repository
     public Mono<ConsentGivenEvent> giveConsent(Actor actor, GiveConsentCommand command){
-        var purposeReference = purposeRepository.getPurpose(command.getReferencedPurpose().getPurposeId());
+        var purposeReference = consentPurposeRepository.getPurpose(command.getReferencedPurpose().getPurposeId());
 
         return Mono.justOrEmpty(actor.getSubjectByReference(command.getSubjectReference()))
                 .switchIfEmpty(Mono.error(new DomainException("Actor may not access referenced subject or it does not exist", ErrorType.USER_ERROR)))

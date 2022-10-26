@@ -4,7 +4,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
-public interface PurposeRepository {
+public interface ConsentPurposeRepository {
 
     Mono<Purpose> getPurpose(UUID purposeId);
 }

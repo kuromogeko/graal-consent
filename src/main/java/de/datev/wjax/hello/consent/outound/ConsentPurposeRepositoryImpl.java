@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @Component
-public class PurposeRepositoryImpl implements PurposeRepository {
+public class ConsentPurposeRepositoryImpl implements ConsentPurposeRepository {
     private final HashMap<UUID, Purpose> map;
 
-    public PurposeRepositoryImpl() {
+    public ConsentPurposeRepositoryImpl() {
         map = new HashMap<>();
         map.put(UUID.fromString("facade00-0000-4000-a000-000000000000"),
                 new Purpose(UUID.fromString("facade00-0000-4000-a000-000000000000"),

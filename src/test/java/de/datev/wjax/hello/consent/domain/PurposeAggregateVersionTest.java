@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PurposeVersionTest {
+class PurposeAggregateVersionTest {
     @ParameterizedTest
     @CsvSource(value = {"1,1,0", "2,1,1", "1,2,-1"})
     void purposeVersionsAreComparable(Integer versionA, Integer versionB, int expected) {

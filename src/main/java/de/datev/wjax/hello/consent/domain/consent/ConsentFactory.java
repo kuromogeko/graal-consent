@@ -17,7 +17,6 @@ public class ConsentFactory {
     }
 
     public Mono<ConsentAggregate> createConsent(GiveConsentCommand command, Subject subject) {
-        //TODO Switch to creation event style repo?
                 return Mono.just(new ConsentAggregate(command.getReferencedPurpose(), Status.NONE, subject.getReference(), UUID.randomUUID(), domainEventPublisher));
     }
 
