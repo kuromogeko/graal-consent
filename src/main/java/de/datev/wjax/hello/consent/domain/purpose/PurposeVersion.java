@@ -14,7 +14,7 @@ public class PurposeVersion {
     /**
      * Compares the versions of purposes
      * @param purposeVersion Version to compare to
-     * @return 0 if equal, 1 if Input is greater version, -1 if Input is smaller version
+     * @return 0 if equal, 1 if Input is smaller version, -1 if Input is greater version
      */
     public int compareTo(PurposeVersion purposeVersion){
         return this.getValue().compareTo(purposeVersion.getValue());
