@@ -125,6 +125,11 @@
 						<artifactId>native-maven-plugin</artifactId>
 						<version>${native-buildtools.version}</version>
 						<extensions>true</extensions>
+						<configuration>
+							<buildArgs>
+								<buildArg>--language:js</buildArg>
+							</buildArgs>
+						</configuration>
 						<executions>
 							<execution>
 								<id>test-native</id>
