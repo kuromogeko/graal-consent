@@ -42,7 +42,7 @@ I want to see the history of a given consent, so I can retrace who acted on beha
 GET /history?consentId=
 
 ### Todo (internal)
-- Create javascript tracking domain
+- Create javascript tracking domain | create outbound part
 - add real repo
 - tests!
 - separate into artifacts
