@@ -17,8 +17,6 @@
         <java.version>17</java.version>
         <repackage.classifier/>
         <spring-native.version>0.12.1</spring-native.version>
-        <compiler.dir>${project.build.directory}/compiler</compiler.dir>
-        <graalvm.version>22.2.0</graalvm.version>
     </properties>
     <dependencies>
         <dependency>
