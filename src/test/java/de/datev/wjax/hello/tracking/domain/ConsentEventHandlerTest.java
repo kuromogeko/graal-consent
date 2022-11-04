@@ -33,4 +33,20 @@ class ConsentEventHandlerTest {
         var history = captor.getValue();
         assertEquals(history.getEvents().get(0).getEvent(), "Consent was given by "+event.getUser().getId()+" for subject "+event.getSubjectReference().getId()+" with the purpose of "+event.getPurpose().getPurposeId()+" in version "+event.getPurpose().getAgreedVersion().getValue()+"");
     }
+
+    @Test
+    void savesAHistoryWithNoObjectExistingBeforehand() {
+        ArgumentCaptor<ConsentHistory> captor = ArgumentCaptor.forClass(ConsentHistory.class);
+        var uuid= UUID.randomUUID();
+        var repository = Mockito.mock(TrackingRepository.class);
+        Mockito.when(repository.load(uuid)).thenReturn(new ConsentHistory(uuid));
+        var handler = new ConsentEventHandler(repository);
+        var event = new ConsentGivenEvent(uuid, new ReferencedPurpose(UUID.randomUUID(), new PurposeVersion(1)),new User(UUID.randomUUID(), new UserCharacteristic(UserType.DEFAULT)),new SubjectReference(UUID.randomUUID()));
+
+        handler.trackGivenConsent(event);
+        Mockito.verify(repository,Mockito.times(1)).load(uuid);
+        Mockito.verify(repository,Mockito.times(1)).save(captor.capture());
+        var history = captor.getValue();
+        assertEquals(history.getEvents().get(0).getEvent(), "Consent was given by "+event.getUser().getId()+" for subject "+event.getSubjectReference().getId()+" with the purpose of "+event.getPurpose().getPurposeId()+" in version "+event.getPurpose().getAgreedVersion().getValue()+"");
+    }
 }
