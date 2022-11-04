@@ -127,17 +127,17 @@
 						<extensions>true</extensions>
 						<configuration>
 							<buildArgs>
-								<buildArg>--language:js</buildArg>
+								<buildArg>--language:js --no-fallback</buildArg>
 							</buildArgs>
 						</configuration>
 						<executions>
-							<execution>
-								<id>test-native</id>
-								<phase>test</phase>
-								<goals>
-									<goal>test</goal>
-								</goals>
-							</execution>
+<!--							<execution>-->
+<!--								<id>test-native</id>-->
+<!--								<phase>test</phase>-->
+<!--								<goals>-->
+<!--									<goal>test</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
 							<execution>
 								<id>build-native</id>
 								<phase>package</phase>

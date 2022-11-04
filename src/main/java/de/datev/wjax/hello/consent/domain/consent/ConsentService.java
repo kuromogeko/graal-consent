@@ -44,7 +44,7 @@ public class ConsentService {
                 .flatMap(subject -> this.repository.getBySubjectAndPurposeRef(subject.getId(),command.getReferencedPurpose())
                         .switchIfEmpty(this.consentFactory.createConsent(command,subject)))
                 .flatMap(consentAggregate -> {
-                    var event = consentAggregate.giveConsent();
+                    var event = consentAggregate.giveConsent(actor.getUser());
                     return repository.save(consentAggregate).thenReturn(event);
                 });
     }
@@ -56,7 +56,7 @@ public class ConsentService {
                     if(actor.getSubjectByReference(consentAggregate.getSubjectReference()).isEmpty()){
                         return Mono.error(new DomainException("Actor may not access referenced consent or it does not exist", ErrorType.USER_ERROR));
                     }
-                    var event = consentAggregate.withdrawConsent();
+                    var event = consentAggregate.withdrawConsent(actor.getUser());
                     return repository.save(consentAggregate).thenReturn(event);
                 });
     }

@@ -3,6 +3,7 @@ package de.datev.wjax.hello.consent.domain.consent;
 import de.datev.wjax.hello.consent.domain.DomainEventPublisher;
 import de.datev.wjax.hello.consent.domain.DomainException;
 import de.datev.wjax.hello.consent.domain.ErrorType;
+import de.datev.wjax.hello.consent.domain.actors.user.User;
 import de.datev.wjax.hello.consent.domain.purpose.PurposeVersion;
 
 import java.util.UUID;
@@ -25,12 +26,12 @@ public class ConsentAggregate {
         this.domainEventPublisher = domainEventPublisher;
     }
 
-    public ConsentGivenEvent giveConsent() {
+    public ConsentGivenEvent giveConsent(User user) {
         if (this.status == Status.GIVEN || this.status == Status.INVALID) {
             throw new DomainException("Consent is either already given or no longer valid", ErrorType.USER_ERROR);
         }
         this.status = Status.GIVEN;
-        ConsentGivenEvent event = new ConsentGivenEvent(this.getConsentId(), this.getPurpose(), this.getSubjectReference());
+        ConsentGivenEvent event = new ConsentGivenEvent(this.getConsentId(), this.getPurpose(), user, this.getSubjectReference());
         this.domainEventPublisher.publish(event);
         return event;
     }
@@ -52,12 +53,12 @@ public class ConsentAggregate {
         return this.status;
     }
 
-    public ConsentWithdrawnEvent withdrawConsent() {
+    public ConsentWithdrawnEvent withdrawConsent(User user) {
         if (this.status != Status.GIVEN) {
             throw new DomainException("Consent is not given, so cannot be withdrawn", ErrorType.USER_ERROR);
         }
         this.status = Status.WITHDRAWN;
-        ConsentWithdrawnEvent event = new ConsentWithdrawnEvent(this.getConsentId(), this.getPurpose(), this.getSubjectReference());
+        ConsentWithdrawnEvent event = new ConsentWithdrawnEvent(this.getConsentId(), this.getPurpose(), user, this.getSubjectReference());
         this.domainEventPublisher.publish(event);
         return event;
     }
@@ -67,5 +68,7 @@ public class ConsentAggregate {
             return;
         }
         this.status = Status.INVALID;
+        var event = new ConsentInvalidatedEvent(this.getConsentId(), this.getPurpose(), this.getSubjectReference());
+        this.domainEventPublisher.publish(event);
     }
 }

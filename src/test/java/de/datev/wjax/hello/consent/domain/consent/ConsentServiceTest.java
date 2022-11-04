@@ -37,6 +37,7 @@ class ConsentServiceTest {
         var event = consentService.giveConsent(actor, command).block();
         var resultingWriteAggregate = consentRepository.getById(event.getConsentId()).block();
         assertEquals(Status.GIVEN, resultingWriteAggregate.getStatus());
+        assertEquals(actor.getUser(), event.getUser());
     }
 
     @Test
@@ -49,5 +50,6 @@ class ConsentServiceTest {
         var event = consentService.withdrawConsent(actor,command).block();
         var result = consentRepository.getById(event.getConsentId()).block();
         assertEquals(Status.WITHDRAWN, result.getStatus());
+        assertEquals(actor.getUser(), event.getUser());
     }
 }
