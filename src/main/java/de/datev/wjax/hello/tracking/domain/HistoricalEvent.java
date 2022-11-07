@@ -11,6 +11,7 @@ public class HistoricalEvent {
         this.timestamp = timestamp;
         this.event = event;
     }
+
     public String getTimestamp() {
         return timestamp;
     }

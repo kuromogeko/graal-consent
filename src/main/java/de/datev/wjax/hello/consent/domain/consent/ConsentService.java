@@ -1,8 +1,8 @@
 package de.datev.wjax.hello.consent.domain.consent;
 
-import de.datev.wjax.hello.consent.domain.actors.Actor;
 import de.datev.wjax.hello.consent.domain.DomainException;
 import de.datev.wjax.hello.consent.domain.ErrorType;
+import de.datev.wjax.hello.consent.domain.actors.Actor;
 import de.datev.wjax.hello.consent.domain.actors.Subject;
 import de.datev.wjax.hello.consent.domain.purpose.ConsentPurposeRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class ConsentService {
     }
 
     //Side effect, purpose repository, consent repository
-    public Mono<ConsentGivenEvent> giveConsent(Actor actor, GiveConsentCommand command){
+    public Mono<ConsentGivenEvent> giveConsent(Actor actor, GiveConsentCommand command) {
         var purposeReference = consentPurposeRepository.getPurpose(command.getReferencedPurpose().getPurposeId());
 
         return Mono.justOrEmpty(actor.getSubjectByReference(command.getSubjectReference()))
@@ -41,19 +41,19 @@ public class ConsentService {
                     }
                     return Mono.just(subject);
                 })
-                .flatMap(subject -> this.repository.getBySubjectAndPurposeRef(subject.getId(),command.getReferencedPurpose())
-                        .switchIfEmpty(this.consentFactory.createConsent(command,subject)))
+                .flatMap(subject -> this.repository.getBySubjectAndPurposeRef(subject.getId(), command.getReferencedPurpose())
+                        .switchIfEmpty(this.consentFactory.createConsent(command, subject)))
                 .flatMap(consentAggregate -> {
                     var event = consentAggregate.giveConsent(actor.getUser());
                     return repository.save(consentAggregate).thenReturn(event);
                 });
     }
 
-    public Mono<ConsentWithdrawnEvent> withdrawConsent(Actor actor, WithdrawConsentCommand command){
+    public Mono<ConsentWithdrawnEvent> withdrawConsent(Actor actor, WithdrawConsentCommand command) {
         return this.repository.getById(command.getConsentId())
                 .switchIfEmpty(Mono.error(new DomainException("Actor may not access referenced consent or it does not exist", ErrorType.USER_ERROR)))
                 .flatMap(consentAggregate -> {
-                    if(actor.getSubjectByReference(consentAggregate.getSubjectReference()).isEmpty()){
+                    if (actor.getSubjectByReference(consentAggregate.getSubjectReference()).isEmpty()) {
                         return Mono.error(new DomainException("Actor may not access referenced consent or it does not exist", ErrorType.USER_ERROR));
                     }
                     var event = consentAggregate.withdrawConsent(actor.getUser());

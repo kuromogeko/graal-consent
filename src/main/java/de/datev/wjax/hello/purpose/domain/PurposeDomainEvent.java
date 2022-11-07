@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface PurposeDomainEvent extends DomainEvent {
     UUID getId();
+
     PurposeVersion getPurposeVersion();
 }

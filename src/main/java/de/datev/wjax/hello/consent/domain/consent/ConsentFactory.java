@@ -17,7 +17,7 @@ public class ConsentFactory {
     }
 
     public Mono<ConsentAggregate> createConsent(GiveConsentCommand command, Subject subject) {
-                return Mono.just(new ConsentAggregate(command.getReferencedPurpose(), Status.NONE, subject.getReference(), UUID.randomUUID(), domainEventPublisher));
+        return Mono.just(new ConsentAggregate(command.getReferencedPurpose(), Status.NONE, subject.getReference(), UUID.randomUUID(), domainEventPublisher));
     }
 
 

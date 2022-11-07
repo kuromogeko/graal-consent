@@ -34,6 +34,6 @@ public class ConsentPurposeRepositoryImpl implements ConsentPurposeRepository {
     @Override
     public Mono<Void> save(Purpose purpose) {
         //noinspection ConstantConditions
-        return Mono.just(map.put(purpose.getId(), purpose)).then();
+        return Mono.justOrEmpty(map.put(purpose.getId(), purpose)).then();
     }
 }

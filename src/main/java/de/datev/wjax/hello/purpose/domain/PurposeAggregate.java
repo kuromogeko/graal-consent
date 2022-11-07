@@ -48,17 +48,17 @@ public class PurposeAggregate {
     }
 
     public PurposeReleasedEvent release() {
-        if(this.releaseStatus != ReleaseStatus.CREATED){
+        if (this.releaseStatus != ReleaseStatus.CREATED) {
             throw new DomainException("Purpose is not in a state where a release is possible", ErrorType.USER_ERROR);
         }
-        var event = new PurposeReleasedEvent(this.getId(), this.getPurposeVersion());
+        var event = new PurposeReleasedEvent(this.getId(), this.getPurposeVersion(), text, viability);
         this.domainEventPublisher.publish(event);
         this.applyRelease(event);
         return event;
     }
 
     public PurposeVersionUpdatedEvent createNewVersion(String updatedText) {
-        if(this.releaseStatus != ReleaseStatus.RELEASED){
+        if (this.releaseStatus != ReleaseStatus.RELEASED) {
             throw new DomainException("A new version of a purpose can only be created if it has been released", ErrorType.USER_ERROR);
         }
         PurposeVersionUpdatedEvent event = new PurposeVersionUpdatedEvent(this.getId(), this.purposeVersion.increaseVersion(), updatedText);
@@ -68,14 +68,14 @@ public class PurposeAggregate {
     }
 
     public void applyRelease(PurposeReleasedEvent event) {
-        if(this.releaseStatus != ReleaseStatus.CREATED){
+        if (this.releaseStatus != ReleaseStatus.CREATED) {
             return;
         }
         this.releaseStatus = ReleaseStatus.RELEASED;
     }
 
-    public void applyVersionUpdate(PurposeVersionUpdatedEvent event){
-        if(this.releaseStatus != ReleaseStatus.RELEASED || this.purposeVersion == event.getPurposeVersion()){
+    public void applyVersionUpdate(PurposeVersionUpdatedEvent event) {
+        if (this.releaseStatus != ReleaseStatus.RELEASED || this.purposeVersion == event.getPurposeVersion()) {
             return;
         }
         this.purposeVersion = event.getPurposeVersion();

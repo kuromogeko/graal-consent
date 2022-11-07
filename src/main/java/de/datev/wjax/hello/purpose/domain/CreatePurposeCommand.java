@@ -10,7 +10,6 @@ public class CreatePurposeCommand {
     private final Viability viability;
 
 
-
     public CreatePurposeCommand(UUID id, String text, PurposeVersion purposeVersion, Viability viability, ReleaseStatus releaseStatus) {
         this.text = text;
         this.viability = viability;

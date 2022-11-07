@@ -2,6 +2,7 @@ package de.datev.wjax.hello.purpose.outbound;
 
 import de.datev.wjax.hello.consent.domain.purpose.PurposeVersion;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PurposeKey {
@@ -13,15 +14,24 @@ public class PurposeKey {
         this.version = version;
     }
 
-    public boolean equals(PurposeKey obj) {
-        return this.getUuid().equals(obj.getUuid()) && this.getVersion().equals(obj.getVersion());
-    }
-
     protected UUID getUuid() {
         return uuid;
     }
 
     protected PurposeVersion getVersion() {
         return version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PurposeKey that = (PurposeKey) o;
+        return Objects.equals(getUuid(), that.getUuid()) && Objects.equals(getVersion(), that.getVersion());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUuid(), getVersion());
     }
 }

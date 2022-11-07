@@ -14,7 +14,7 @@ POST /purposes/
 {
  "text": "I agree to the processing of my data in accordance to article 6a for the purpose of marketing and tax declaration."
 }
-
+//RELEASE
 GET /purposes/
 
 POST /consents/

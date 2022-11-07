@@ -44,7 +44,7 @@ public class PurposeService {
                 .doOnNext(purposeRepository::save);
     }
 
-    public Mono<PurposeVersionUpdatedEvent> createPurposeVersion(Actor actor, CreatePurposeVersionCommand command){
+    public Mono<PurposeVersionUpdatedEvent> createPurposeVersion(Actor actor, CreatePurposeVersionCommand command) {
         if (!actor.getScopes().contains(Scope.ADMIN)) {
             return Mono.error(new DomainException("User is not allowed to release purposes", ErrorType.USER_ERROR));
         }

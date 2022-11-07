@@ -1,8 +1,8 @@
 package de.datev.wjax.hello.consent.domain.actors;
 
-import de.datev.wjax.hello.consent.domain.consent.SubjectReference;
 import de.datev.wjax.hello.consent.domain.actors.organisation.Organisation;
 import de.datev.wjax.hello.consent.domain.actors.user.User;
+import de.datev.wjax.hello.consent.domain.consent.SubjectReference;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +31,8 @@ public class Actor {
         return scopes;
     }
 
-    public Optional<Subject> getSubjectByReference(SubjectReference reference){
-        if(this.user.getId().equals(reference.getId())){
+    public Optional<Subject> getSubjectByReference(SubjectReference reference) {
+        if (this.user.getId().equals(reference.getId())) {
             return Optional.of(this.user);
         }
         return this.organisations.stream().filter(organisation -> organisation.getId().equals(reference.getId())).findFirst()

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Component
 public class TrackingRepositoryImpl implements TrackingRepository {
 
-    private final HashMap<UUID,ConsentHistory> repo;
+    private final HashMap<UUID, ConsentHistory> repo;
 
     public TrackingRepositoryImpl() {
         repo = new HashMap<>();

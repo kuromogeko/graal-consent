@@ -19,6 +19,7 @@ public class ConsentHistory {
         this.consentId = consentId;
         this.events = events;
     }
+
     public UUID getConsentId() {
         return consentId;
     }

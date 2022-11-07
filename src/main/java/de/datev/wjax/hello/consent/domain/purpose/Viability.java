@@ -10,6 +10,7 @@ public class Viability {
     }
 
     private final SubjectType subjectType;
+
     private final TargetCharacteristic targetCharacteristic;
 
     public Viability(SubjectType subjectType, TargetCharacteristic targetCharacteristic) {

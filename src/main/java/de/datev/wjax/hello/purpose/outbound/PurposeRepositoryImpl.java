@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class PurposeRepositoryImpl implements PurposeRepository {
 
-    private final HashMap<PurposeKey, List<PurposeDomainEvent>> map;
+    private final HashMap<UUID, List<PurposeDomainEvent>> map;
     private final PurposeFactory factory;
 
     public PurposeRepositoryImpl(PurposeFactory factory) {
@@ -23,11 +24,11 @@ public class PurposeRepositoryImpl implements PurposeRepository {
 
     @Override
     public Mono<Void> save(PurposeDomainEvent event) {
-        PurposeKey key = new PurposeKey(event.getId(), event.getPurposeVersion());
-        return Mono.just(map.put(key, addToList(event, key))).then();
+        UUID key = event.getId();
+        return Mono.justOrEmpty(map.put(key, addToList(event, key))).then();
     }
 
-    private List<PurposeDomainEvent> addToList(PurposeDomainEvent event, PurposeKey key) {
+    private List<PurposeDomainEvent> addToList(PurposeDomainEvent event, UUID key) {
         ArrayList<PurposeDomainEvent> eventList = new ArrayList<>(map.getOrDefault(key, List.of()));
         eventList.add(event);
         return eventList;
@@ -35,19 +36,18 @@ public class PurposeRepositoryImpl implements PurposeRepository {
 
     @Override
     public Mono<PurposeAggregate> search(UUID uuid, PurposeVersion version) {
-        return Mono.justOrEmpty(Optional.ofNullable(map.get(new PurposeKey(uuid,version))))
+        return Mono.justOrEmpty(Optional.ofNullable(map.get(uuid)))
+                .map(purposeDomainEvents -> purposeDomainEvents.stream()
+                        //All events of same or smaller version
+                        .filter(event -> event.getPurposeVersion().compareTo(version) != -1)
+                        .collect(Collectors.toList()))
                 .map(this.factory::replay);
     }
 
     // Strictly speaking this is impure, the domain logic of what latest means should be inside the domain?!
     @Override
     public Mono<PurposeAggregate> searchLatest(UUID id) {
-        return Mono.justOrEmpty(map.keySet().stream().filter(purposeKey -> purposeKey.getUuid().equals(id))
-                .reduce((leftKey, rightKey) -> {
-                    if(leftKey.getVersion().compareTo(rightKey.getVersion())>=0){
-                        return leftKey;
-                    }
-                    return rightKey;
-                }).map(purposeKey -> this.factory.replay(map.get(purposeKey))));
+        return Mono.justOrEmpty(Optional.ofNullable(map.get(id)))
+                .map(this.factory::replay);
     }
 }

@@ -8,9 +8,12 @@ import java.util.UUID;
 
 public interface Subject {
     boolean isOfType(SubjectType type);
+
     boolean hasCharacteristic(TargetCharacteristic characteristic);
+
     UUID getId();
-    default SubjectReference getReference(){
+
+    default SubjectReference getReference() {
         return new SubjectReference(this.getId());
     }
 }
