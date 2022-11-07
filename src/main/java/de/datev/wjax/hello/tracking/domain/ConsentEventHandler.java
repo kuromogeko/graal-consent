@@ -49,7 +49,6 @@ public class ConsentEventHandler {
                     textBuilder.append((char) c);
                 }
             }
-            System.out.println(textBuilder.toString());
             context.eval(Source.create("js", textBuilder.toString()));
 
             var eventHandler = context.getBindings("js").getMember("handleGivenEvent");
