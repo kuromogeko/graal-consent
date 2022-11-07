@@ -3,6 +3,7 @@ package de.datev.wjax.hello.consent.domain.consent;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ConsentRepository {
@@ -13,4 +14,6 @@ public interface ConsentRepository {
     Mono<ConsentAggregate> getBySubjectAndPurposeRef(UUID subjectId, ReferencedPurpose referencedPurpose);
 
     Flux<ConsentAggregate> getByPurpose(UUID id);
+
+    Flux<ConsentAggregate> getBySubjects(List<UUID> relevantSubjects);
 }

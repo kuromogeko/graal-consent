@@ -1,8 +1,9 @@
-GET http://localhost:8080/api/hello
+### Lists purposes as admin
+GET http://localhost:8080/api/admin/purposes
 
-###
+### Create a purpose
 // @no-log
-POST http://localhost:8080/api/purposes/
+POST http://localhost:8080/api/admin/purposes/
 Content-Type: application/json
 
 {
@@ -21,8 +22,8 @@ client.global.set("purposeId", response.body.id);
 client.log("purposeId: "+client.global.get("purposeId"))
  %}
 
-###
-POST http://localhost:8080/api/purposes/{{purposeId}}/release
+### Make a purpose agreeable
+POST http://localhost:8080/api/admin/purposes/{{purposeId}}/release
 Content-Type: application/json
 
 {
@@ -30,8 +31,16 @@ Content-Type: application/json
     "value": 1
   }
 }
+### List purposes
+// @no-log
+GET http://localhost:8080/api/purposes
 
-###
+### List consents of enduser
+// @no-log
+GET http://localhost:8080/api/consents
+X-User-Id: c0c0a000-0000-4000-a000-000000000000
+
+### Agree to a purpose
 // @no-log
 POST http://localhost:8080/api/consents
 Content-Type: application/json
@@ -49,11 +58,41 @@ X-User-Id: c0c0a000-0000-4000-a000-000000000000
   }
 }
 
-###
+> {%
+client.global.set("consentId", response.body.consentId);
+ %}
+
+### Agree to a predef purpose
+// @no-log
+POST http://localhost:8080/api/consents
+Content-Type: application/json
+X-User-Id: c0c0a000-0000-4000-a000-000000000000
+
+{
+  "referencedPurpose": {
+    "purposeId": "facade00-0000-4000-a000-000000000000",
+    "agreedVersion": {
+      "value": 1
+    }
+  },
+  "subjectReference": {
+    "id": "c0c0a000-0000-4000-a000-000000000000"
+  }
+}
+
+> {%
+client.global.set("consentId", response.body.consentId);
+ %}
+
+### Update a purpose
 //@no-log
-PATCH http://localhost:8080/api/purposes/{{purposeId}}
+PATCH http://localhost:8080/api/admin/purposes/{{purposeId}}
 Content-Type: application/json
 
 {
   "text": "I agree to the processing of my data in accordance to article 6a for the purpose of tax declaration."
 }
+
+### Look at history of consent
+//@no-log
+GET http://localhost:8080/api/history?consentId={{consentId}}

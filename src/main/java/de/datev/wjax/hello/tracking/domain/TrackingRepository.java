@@ -6,5 +6,5 @@ import java.util.UUID;
 public interface TrackingRepository {
     void save(ConsentHistory history);
 
-    Optional<ConsentHistory> load(UUID uuid);
+    ConsentHistory load(UUID uuid);
 }

@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,5 +46,10 @@ public class ConsentRepositoryImpl implements ConsentRepository {
     @Override
     public Flux<ConsentAggregate> getByPurpose(UUID id) {
         return Flux.fromIterable(this.map.values().stream().filter(consentAggregate -> consentAggregate.getPurpose().getPurposeId().equals(id)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public Flux<ConsentAggregate> getBySubjects(List<UUID> relevantSubjects) {
+        return Flux.fromIterable(this.map.values().stream().filter(consentAggregate -> relevantSubjects.contains(consentAggregate.getSubjectReference().getId())).collect(Collectors.toList()));
     }
 }

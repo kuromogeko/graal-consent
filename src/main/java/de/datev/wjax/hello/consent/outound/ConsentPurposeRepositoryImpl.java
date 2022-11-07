@@ -4,6 +4,7 @@ import de.datev.wjax.hello.consent.domain.actors.user.UserCharacteristic;
 import de.datev.wjax.hello.consent.domain.actors.user.UserType;
 import de.datev.wjax.hello.consent.domain.purpose.*;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -35,5 +36,10 @@ public class ConsentPurposeRepositoryImpl implements ConsentPurposeRepository {
     public Mono<Void> save(Purpose purpose) {
         //noinspection ConstantConditions
         return Mono.justOrEmpty(map.put(purpose.getId(), purpose)).then();
+    }
+
+    @Override
+    public Flux<Purpose> all() {
+        return Flux.fromIterable(map.values());
     }
 }

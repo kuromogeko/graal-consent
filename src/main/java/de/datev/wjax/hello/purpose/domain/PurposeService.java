@@ -6,6 +6,7 @@ import de.datev.wjax.hello.consent.domain.ErrorType;
 import de.datev.wjax.hello.consent.domain.actors.Actor;
 import de.datev.wjax.hello.consent.domain.actors.Scope;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -52,5 +53,12 @@ public class PurposeService {
                 .switchIfEmpty(Mono.error(new DomainException("The purpose could not be found", ErrorType.USER_ERROR)))
                 .map(purposeAggregate -> purposeAggregate.createNewVersion(command.getUpdatedText()))
                 .doOnNext(purposeRepository::save);
+    }
+
+    public Flux<PurposeAggregate> getPurposes(Actor actor) {
+        if (!actor.getScopes().contains(Scope.ADMIN)) {
+            return Flux.error(new DomainException("User is not allowed to view purposes", ErrorType.USER_ERROR));
+        }
+        return purposeRepository.all();
     }
 }

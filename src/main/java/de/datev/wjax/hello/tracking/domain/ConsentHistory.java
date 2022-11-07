@@ -20,6 +20,10 @@ public class ConsentHistory {
         this.events = events;
     }
 
+    public void addEventToHistory(HistoricalEvent event){
+        this.getEvents().add(event);
+    }
+
     public UUID getConsentId() {
         return consentId;
     }

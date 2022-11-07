@@ -6,6 +6,7 @@ import de.datev.wjax.hello.purpose.domain.PurposeDomainEvent;
 import de.datev.wjax.hello.purpose.domain.PurposeFactory;
 import de.datev.wjax.hello.purpose.domain.PurposeRepository;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -49,5 +50,10 @@ public class PurposeRepositoryImpl implements PurposeRepository {
     public Mono<PurposeAggregate> searchLatest(UUID id) {
         return Mono.justOrEmpty(Optional.ofNullable(map.get(id)))
                 .map(this.factory::replay);
+    }
+
+    @Override
+    public Flux<PurposeAggregate> all() {
+        return Flux.fromIterable(map.values()).map(this.factory::replay);
     }
 }

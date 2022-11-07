@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +19,8 @@ class ConsentEventHandlerTest {
         ArgumentCaptor<ConsentHistory> captor = ArgumentCaptor.forClass(ConsentHistory.class);
         var uuid = UUID.randomUUID();
         var repository = Mockito.mock(TrackingRepository.class);
-        Mockito.when(repository.load(uuid)).thenReturn(Optional.of(new ConsentHistory(uuid)));
+//        Mockito.when(repository.load(uuid)).thenReturn(Optional.of(new ConsentHistory(uuid)));
+        Mockito.when(repository.load(uuid)).thenReturn(new ConsentHistory(uuid));
         var handler = new ConsentEventHandler(repository);
         var event = new ConsentGivenEvent(uuid, new ReferencedPurpose(UUID.randomUUID(), new PurposeVersion(1)), new User(UUID.randomUUID(), new UserCharacteristic(UserType.DEFAULT)), new SubjectReference(UUID.randomUUID()));
 
@@ -36,7 +36,7 @@ class ConsentEventHandlerTest {
         ArgumentCaptor<ConsentHistory> captor = ArgumentCaptor.forClass(ConsentHistory.class);
         var uuid = UUID.randomUUID();
         var repository = Mockito.mock(TrackingRepository.class);
-        Mockito.when(repository.load(uuid)).thenReturn(Optional.empty());
+        Mockito.when(repository.load(uuid)).thenReturn(null);
         var handler = new ConsentEventHandler(repository);
         var event = new ConsentGivenEvent(uuid, new ReferencedPurpose(UUID.randomUUID(), new PurposeVersion(1)), new User(UUID.randomUUID(), new UserCharacteristic(UserType.DEFAULT)), new SubjectReference(UUID.randomUUID()));
 
@@ -52,7 +52,7 @@ class ConsentEventHandlerTest {
         ArgumentCaptor<ConsentHistory> captor = ArgumentCaptor.forClass(ConsentHistory.class);
         var uuid = UUID.randomUUID();
         var repository = Mockito.mock(TrackingRepository.class);
-        Mockito.when(repository.load(uuid)).thenReturn(Optional.of(new ConsentHistory(uuid)));
+        Mockito.when(repository.load(uuid)).thenReturn((new ConsentHistory(uuid)));
         var handler = new ConsentEventHandler(repository);
         var event = new ConsentWithdrawnEvent(uuid, new ReferencedPurpose(UUID.randomUUID(), new PurposeVersion(1)), new User(UUID.randomUUID(), new UserCharacteristic(UserType.DEFAULT)), new SubjectReference(UUID.randomUUID()));
 
@@ -68,7 +68,7 @@ class ConsentEventHandlerTest {
         ArgumentCaptor<ConsentHistory> captor = ArgumentCaptor.forClass(ConsentHistory.class);
         var uuid = UUID.randomUUID();
         var repository = Mockito.mock(TrackingRepository.class);
-        Mockito.when(repository.load(uuid)).thenReturn(Optional.of(new ConsentHistory(uuid)));
+        Mockito.when(repository.load(uuid)).thenReturn((new ConsentHistory(uuid)));
         var handler = new ConsentEventHandler(repository);
         var event = new ConsentInvalidatedEvent(uuid, new ReferencedPurpose(UUID.randomUUID(), new PurposeVersion(1)), new SubjectReference(UUID.randomUUID()));
 

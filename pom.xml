@@ -127,7 +127,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <buildArgs>
-                                <buildArg>--language:js --no-fallback</buildArg>
+                                <buildArg>--language:js --no-fallback -J-Xmx10g</buildArg>
                             </buildArgs>
                         </configuration>
                         <executions>

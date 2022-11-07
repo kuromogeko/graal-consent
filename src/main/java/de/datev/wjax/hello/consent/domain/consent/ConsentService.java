@@ -4,9 +4,13 @@ import de.datev.wjax.hello.consent.domain.DomainException;
 import de.datev.wjax.hello.consent.domain.ErrorType;
 import de.datev.wjax.hello.consent.domain.actors.Actor;
 import de.datev.wjax.hello.consent.domain.actors.Subject;
+import de.datev.wjax.hello.consent.domain.actors.organisation.Organisation;
 import de.datev.wjax.hello.consent.domain.purpose.ConsentPurposeRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.stream.Collectors;
 
 import static de.datev.wjax.hello.consent.domain.ErrorType.USER_ERROR;
 
@@ -59,6 +63,13 @@ public class ConsentService {
                     var event = consentAggregate.withdrawConsent(actor.getUser());
                     return repository.save(consentAggregate).thenReturn(event);
                 });
+    }
+
+    public Flux<ConsentAggregate> getConsents(Actor actor) {
+        var relevantSubjects = actor.getOrganisations().stream().map(Organisation::getId)
+                .collect(Collectors.toList());
+        relevantSubjects.add(actor.getUser().getId());
+        return repository.getBySubjects(relevantSubjects);
     }
 
     //Purpose updated/deleted

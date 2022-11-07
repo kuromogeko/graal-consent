@@ -10,12 +10,14 @@ import de.datev.wjax.hello.consent.domain.actors.user.UserType;
 import de.datev.wjax.hello.consent.domain.purpose.PurposeVersion;
 import de.datev.wjax.hello.purpose.domain.*;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@RestController()
+@RequestMapping("/api/admin/")
 public class PurposeController {
     private final PurposeService purposeService;
     private Actor actor = new Actor(
@@ -26,18 +28,23 @@ public class PurposeController {
         this.purposeService = purposeService;
     }
 
-    @PostMapping(path = "api/purposes/")
+    @GetMapping("/purposes")
+    public Flux<PurposeAggregate> getPurposes(){
+        return purposeService.getPurposes(actor);
+    }
+
+    @PostMapping(path = "purposes/")
     public Mono<PurposeCreatedEvent> createPurpose(@RequestBody CreatePurposeCommand command) {
         return purposeService.createPurpose(actor, command);
     }
 
-    @PatchMapping("/api/purposes/{id}")
+    @PatchMapping("purposes/{id}")
     public Mono<PurposeVersionUpdatedEvent> updatePurpose(@RequestBody UpdateConsentCommandDto commandDto, @PathVariable UUID id) {
         var command = new CreatePurposeVersionCommand(id, commandDto.text());
         return purposeService.createPurposeVersion(actor, command);
     }
 
-    @PostMapping("/api/purposes/{id}/release")
+    @PostMapping("purposes/{id}/release")
     public Mono<PurposeReleasedEvent> releasePurpose(@RequestBody ReleasePurposeCommandDto commandDto, @PathVariable UUID id){
         var command = new ReleasePurposeCommand(id,commandDto.purposeVersion());
         return purposeService.releasePurpose(actor, command);

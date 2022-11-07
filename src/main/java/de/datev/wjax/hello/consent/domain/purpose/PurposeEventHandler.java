@@ -31,7 +31,6 @@ public class PurposeEventHandler {
                 return Mono.empty();
             }
             return purposeRepository.save(purpose);
-            //TODO Flatmap doesnt trigger
         }).then(this.repository.getByPurpose(event.getId()).flatMap(consentAggregate -> {
             consentAggregate.invalidateForSmallerVersions(event.getPurposeVersion());
             return this.repository.save(consentAggregate);
