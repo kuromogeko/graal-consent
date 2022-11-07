@@ -61,10 +61,26 @@ public class ConsentEventHandler {
     @EventListener
     public void trackWithdrawnConsent(ConsentWithdrawnEvent event) {
         try {
-            Context context = Context.newBuilder("js").allowHostAccess(HostAccess.ALL).allowHostClassLookup(s -> true).build();
-            context.eval(Source.newBuilder("js",
-                            new File(getClass().getClassLoader().getResource("tracking.js").toURI()))
-                    .build());
+            Context context = Context
+                    .newBuilder("js")
+                    .allowHostAccess(HostAccess.ALL)
+                    .allowHostClassLookup(s -> true)
+                    .allowAllAccess(true)
+                    .build();
+            var stream = Thread
+                    .currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream("tracking.js");
+
+            StringBuilder textBuilder = new StringBuilder();
+            try (Reader reader = new BufferedReader(new InputStreamReader
+                    (stream, StandardCharsets.UTF_8))) {
+                int c = 0;
+                while ((c = reader.read()) != -1) {
+                    textBuilder.append((char) c);
+                }
+            }
+            context.eval(Source.create("js", textBuilder.toString()));
 
             var eventHandler = context.getBindings("js").getMember("handleWithdrawnEvent");
             eventHandler.execute(repository, event);
@@ -76,10 +92,26 @@ public class ConsentEventHandler {
     @EventListener
     public void trackInvalidatedConsent(ConsentInvalidatedEvent event) {
         try {
-            Context context = Context.newBuilder("js").allowHostAccess(HostAccess.ALL).allowHostClassLookup(s -> true).build();
-            context.eval(Source.newBuilder("js",
-                            new File(getClass().getClassLoader().getResource("tracking.js").toURI()))
-                    .build());
+            Context context = Context
+                    .newBuilder("js")
+                    .allowHostAccess(HostAccess.ALL)
+                    .allowHostClassLookup(s -> true)
+                    .allowAllAccess(true)
+                    .build();
+            var stream = Thread
+                    .currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream("tracking.js");
+
+            StringBuilder textBuilder = new StringBuilder();
+            try (Reader reader = new BufferedReader(new InputStreamReader
+                    (stream, StandardCharsets.UTF_8))) {
+                int c = 0;
+                while ((c = reader.read()) != -1) {
+                    textBuilder.append((char) c);
+                }
+            }
+            context.eval(Source.create("js", textBuilder.toString()));
 
             var eventHandler = context.getBindings("js").getMember("handleInvalidatedEvent");
             eventHandler.execute(repository, event);
