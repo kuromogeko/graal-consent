@@ -14,7 +14,10 @@ For native image
 
 ### Build specialties
 META-INF.native image in resources holds a reflect-config.json referencing ConsentInvalidatedEvent since it is not found by Graal agent due to the way reactive context is built.  
--> If you want to see the native image crash you can remove the file.
+-> If you want to see the native image crash you can remove the file.  
+
+The agentlib tracking files (from normal tracking not from build) can be found in agentlib folder. 
+
 ## Runtime Size differences
 
 JS Code part can be activated/disabled by Registering/Removing ConsentEventHandler from Spring Context (e.g. commenting out component annotation)
