@@ -62,27 +62,7 @@ X-User-Id: c0c0a000-0000-4000-a000-000000000000
 client.global.set("consentId", response.body.consentId);
  %}
 
-### Agree to a predef purpose
-// @no-log
-POST http://localhost:8080/api/consents
-Content-Type: application/json
-X-User-Id: c0c0a000-0000-4000-a000-000000000000
 
-{
-  "referencedPurpose": {
-    "purposeId": "facade00-0000-4000-a000-000000000000",
-    "agreedVersion": {
-      "value": 1
-    }
-  },
-  "subjectReference": {
-    "id": "c0c0a000-0000-4000-a000-000000000000"
-  }
-}
-
-> {%
-client.global.set("consentId", response.body.consentId);
- %}
 
 ### Update a purpose
 //@no-log
