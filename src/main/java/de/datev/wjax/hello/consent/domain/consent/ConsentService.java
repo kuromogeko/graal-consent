@@ -29,7 +29,8 @@ public class ConsentService {
 
     //Side effect, purpose repository, consent repository
     public Mono<ConsentGivenEvent> giveConsent(Actor actor, GiveConsentCommand command) {
-        var purposeReference = consentPurposeRepository.getPurpose(command.getReferencedPurpose().getPurposeId());
+        var purposeReference = consentPurposeRepository.getPurpose(command.getReferencedPurpose().getPurposeId())
+                .switchIfEmpty(Mono.error(new DomainException("Purpose not found.", ErrorType.USER_ERROR)));
 
         return Mono.justOrEmpty(actor.getSubjectByReference(command.getSubjectReference()))
                 .switchIfEmpty(Mono.error(new DomainException("Actor may not access referenced subject or it does not exist", ErrorType.USER_ERROR)))
@@ -72,6 +73,5 @@ public class ConsentService {
         return repository.getBySubjects(relevantSubjects);
     }
 
-    //Purpose updated/deleted
 
 }

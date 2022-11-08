@@ -28,7 +28,7 @@ class ConsentEventHandlerTest {
         Mockito.verify(repository, Mockito.times(1)).load(uuid);
         Mockito.verify(repository, Mockito.times(1)).save(captor.capture());
         var history = captor.getValue();
-        assertEquals(history.getEvents().get(0).getEvent(), "Consent was given by " + event.getUser().getId() + " for subject " + event.getSubjectReference().getId() + " with the purpose of " + event.getPurpose().getPurposeId() + " in version " + event.getPurpose().getAgreedVersion().getValue() + "");
+        assertEquals(history.getEvents().get(0).getEvent(), "Consent was given by " + event.user().getId() + " for subject " + event.subjectReference().getId() + " with the purpose of " + event.purpose().getPurposeId() + " in version " + event.purpose().getAgreedVersion().getValue() + "");
     }
 
     @Test
@@ -44,7 +44,7 @@ class ConsentEventHandlerTest {
         Mockito.verify(repository, Mockito.times(1)).load(uuid);
         Mockito.verify(repository, Mockito.times(1)).save(captor.capture());
         var history = captor.getValue();
-        assertEquals(history.getEvents().get(0).getEvent(), "Consent was given by " + event.getUser().getId() + " for subject " + event.getSubjectReference().getId() + " with the purpose of " + event.getPurpose().getPurposeId() + " in version " + event.getPurpose().getAgreedVersion().getValue() + "");
+        assertEquals(history.getEvents().get(0).getEvent(), "Consent was given by " + event.user().getId() + " for subject " + event.subjectReference().getId() + " with the purpose of " + event.purpose().getPurposeId() + " in version " + event.purpose().getAgreedVersion().getValue() + "");
     }
 
     @Test
@@ -76,6 +76,6 @@ class ConsentEventHandlerTest {
         Mockito.verify(repository, Mockito.times(1)).load(uuid);
         Mockito.verify(repository, Mockito.times(1)).save(captor.capture());
         var history = captor.getValue();
-        assertEquals(history.getEvents().get(0).getEvent(), "Consent was invalidated for subject " + event.getSubjectReference().getId() + " with the purpose of " + event.getReferencedPurpose().getPurposeId() + " in version " + event.getReferencedPurpose().getAgreedVersion().getValue() + " due to a new version");
+        assertEquals(history.getEvents().get(0).getEvent(), "Consent was invalidated for subject " + event.subjectReference().getId() + " with the purpose of " + event.referencedPurpose().getPurposeId() + " in version " + event.referencedPurpose().getAgreedVersion().getValue() + " due to a new version");
     }
 }

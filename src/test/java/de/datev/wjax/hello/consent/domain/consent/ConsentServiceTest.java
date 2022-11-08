@@ -39,9 +39,9 @@ class ConsentServiceTest {
                 referencedPurpose,
                 subjectReference);
         var event = consentService.giveConsent(actor, command).block();
-        var resultingWriteAggregate = consentRepository.getById(event.getConsentId()).block();
+        var resultingWriteAggregate = consentRepository.getById(event.consentId()).block();
         assertEquals(Status.GIVEN, resultingWriteAggregate.getStatus());
-        assertEquals(actor.getUser(), event.getUser());
+        assertEquals(actor.getUser(), event.user());
     }
 
     @Test

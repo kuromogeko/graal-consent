@@ -127,7 +127,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <buildArgs>
-                                <buildArg>--language:js --no-fallback -J-Xmx10g</buildArg>
+                                <buildArg>--language:js --no-fallback -J-Xmx10g -H:ResourceConfigurationFiles=../resource-config.json</buildArg>
                             </buildArgs>
                         </configuration>
                         <executions>
