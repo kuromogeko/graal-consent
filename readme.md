@@ -50,7 +50,7 @@ I want to see the history of a given consent, so I can retrace who acted on beha
 
 ## Domain Model
 ### Purposes
-![](docs/purpose_state.png)
+![](docs/purpose_state_diag.png)
 
 ### Consent
 ![](docs/consent_state.png)
