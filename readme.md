@@ -48,6 +48,12 @@ I would also like all consents of an earlier version given to this purpose to be
 ### Use Case 3 (Domain tracking)
 I want to see the history of a given consent, so I can retrace who acted on behalf of my company in order to verify whether a consent given is legitimate.
 
+## Domain Model
+### Purposes
+![](docs/purpose_state.png)
+
+### Consent
+![](docs/consent_state.png)
 
 ## Todo
 - add real repo
